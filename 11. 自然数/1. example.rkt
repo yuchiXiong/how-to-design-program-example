@@ -97,3 +97,66 @@
            (create-prices (sub1 n)))]))
 
 (create-prices 20)
+
+;; 习题 11.4.1 分别手工计算和使用 DrScheme 计算(! 2)的值。除此之外，用 10，100 和 1000 进行测试!。
+;; 注意： 这些表达式的返回值是非常大的数，远超过许多程序设计语言本身的表示能力。
+(define (! n)
+  (cond
+    [(zero? n) 1]
+    [else (* n (! (sub1 n)))]))
+
+(! 3)
+(! 5)
+(! 10)
+(! 100)
+(! 1000)
+
+;; 习题 11.4.2 使用这种方法定义函数 product，其参数是两个自然数，n 和 m，而且 m > n。它返回在 n（不包括）和 m（包括）之间所有数的乘积。
+;; 假设我们现在要设计函数 product-from-20，计算在 20（不包括）和 n（包括）之间所有数的乘积，这里的 n 是一个大于 20 的数。这时，我们有几种不同的选择方案。第一种方法，我们可以定义一个函数，计算(! n)和(! 20)，再用后者去除前者。简单的数学计算表明这种方法确实能产生 20（不包括）和 n（包括）之间所有数的乘积：
+(define (product n m)
+  (cond
+    [(< m n) (error "m < n !")]
+    [(= m n) n]
+    [else (* m (product n (sub1 m)))]))
+
+(product 4 5)
+
+;; 习题 11.4.3 设计 product-from-minus-11。这个函数读入一个大于或等于-11 的整数 n，返回在-11（不包括）和 n（包括）之间所有数的乘积。
+(product -11 -9)
+
+;; 习题 11.5.1 定义 add，该函数读入两个自然数 n 和 x，不使用 Scheme 提供的+，返回 n + x。
+(define (add n x)
+  (cond
+    [(zero? n) x]
+    [else (add1 (add (sub1 n) x))]))
+
+(add 10 30)
+(add 990 10)
+
+;; 习题 11.5.2 设计函数 multiply-by-pi，该函数读入一个自然数，不使用 Scheme 提供的*，返回这个数乘上 3.14。
+;; 定义函数 multiply，其输入是两个自然数 n 和 x，不使用 Scheme 提供的*，返回 n * x。最后，去除这些定义之中的+。
+(define (multiply-by-pi n)
+  (cond
+    [(= n 1) 3.14]
+    [else
+     (+ 3.14
+        (multiply-by-pi (sub1 n)))]))
+
+(multiply-by-pi 1)
+(multiply-by-pi 2)
+(multiply-by-pi 3)
+
+(define (multiply n x)
+  (cond
+    [(= n 1) x]
+    [else (+ x (multiply (sub1 n) x))]))
+
+(multiply 9 10)
+
+(define (exponent n x)
+  (cond
+    [(zero? x) 1]
+    [else (multiply n (exponent n (sub1 x)))]))
+
+(exponent 2 5)
+(exponent 10 5)
